@@ -1,0 +1,33 @@
+{
+  "key": "olevegic-addon",
+  "name": "Teamlead TodoList",
+  "description": "Teamlead TodoList is a Jira Cloud integrated application built with Atlassian Connect Express and Atlaskit, providing an interface for managing project tasks. It allows users to fetch tasks via Jira's API, mark them as completed, and filter them in a user-friendly way. ",
+  "baseUrl": "{{localBaseUrl}}",
+  "authentication": {
+    "type": "jwt"
+  },
+  "lifecycle": {
+    "installed": "/installed"
+  },
+  "scopes": ["READ"],
+  "apiMigrations": {
+    "signed-install": true
+  },
+  "modules": {
+    "generalPages": [
+      {
+        "key": "todolist-tasks-jira",
+        "location": "system.top.navigation.bar",
+        "name": {
+          "value": "TodoList Tasks"
+        },
+        "url": "/todolist",
+        "conditions": [
+          {
+            "condition": "user_is_logged_in"
+          }
+        ]
+      }
+    ]
+  }
+}
