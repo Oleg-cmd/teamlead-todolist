@@ -34,7 +34,7 @@ export const post = (req, endpoint, data) => {
         return;
       }
 
-      // Проверка HTTP статуса (adjust success codes as needed)
+      // Check statuses
       if (![200, 201].includes(response.statusCode)) {
         const error = `Ошибка POST запроса к ${endpoint}: ${JSON.stringify(
           response ? response.toJSON() : undefined,

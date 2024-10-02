@@ -6,8 +6,8 @@ export default function tasksRoutes(app, addon) {
    * @swagger
    * /api/tasks:
    *   post:
-   *     summary: Получение списка задач из Jira
-   *     description: Возвращает список задач Jira, соответствующих заданному JQL запросу.
+   *     summary: Retrieve the list of tasks from Jira
+   *     description: Returns a list of Jira tasks matching the given JQL query.
    *     tags:
    *       - Tasks
    *     security:
@@ -15,32 +15,32 @@ export default function tasksRoutes(app, addon) {
    *     parameters:
    *       - in: body
    *         name: body
-   *         description: Параметры запроса к Jira (форматированные с помощью formQuery)
+   *         description: Request parameters for Jira (formatted using formQuery)
    *         required: true
    *         schema:
    *           type: object
    *           properties:
    *             jql:
    *               type: string
-   *               description: JQL запрос для фильтрации задач
+   *               description: JQL query for task filtering
    *               example: project = "My Project" AND status = "In Progress"
    *             maxResults:
    *               type: integer
-   *               description: Максимальное количество возвращаемых задач
+   *               description: Maximum number of tasks to return
    *               example: 50
    *             startAt:
    *               type: integer
-   *               description: Индекс первой возвращаемой задачи (для пагинации)
+   *               description: Index of the first task to return (for pagination)
    *               example: 0
    *     responses:
    *       200:
-   *         description: Успешный ответ с массивом задач
+   *         description: Successful response with an array of tasks
    *         schema:
    *           $ref: '#/components/schemas/Task'
    *       400:
-   *         description: Неверный запрос (например, неверный JQL)
+   *         description: Invalid request (e.g., incorrect JQL)
    *       401:
-   *         description: Необходима аутентификация
+   *         description: Authentication required
    */
   app.post("/api/tasks", addon.checkValidToken(), async (req, res) => {
     const data = JSON.stringify(formQuery(req));
@@ -52,8 +52,8 @@ export default function tasksRoutes(app, addon) {
    * @swagger
    * /api/count:
    *   post:
-   *     summary: Получение примерного количества задач в Jira
-   *     description: Возвращает примерное количество задач Jira, соответствующих заданному JQL запросу.
+   *     summary: Retrieve approximate task count in Jira
+   *     description: Returns an approximate count of Jira tasks matching the given JQL query.
    *     tags:
    *       - Tasks
    *     security:
@@ -61,22 +61,22 @@ export default function tasksRoutes(app, addon) {
    *     parameters:
    *       - in: body
    *         name: body
-   *         description: Ключ проекта Jira
+   *         description: Jira project key
    *         required: true
    *         schema:
    *           type: object
    *           properties:
    *             key:
    *               type: string
-   *               description: Ключ проекта Jira
+   *               description: Jira project key
    *               example: "MYPROJECT"
    *     responses:
    *       200:
-   *         description: Успешный ответ с примерным количеством задач
+   *         description: Successful response with approximate task count
    *       400:
-   *         description: Неверный запрос (например, неверный ключ проекта)
+   *         description: Invalid request (e.g., incorrect project key)
    *       401:
-   *         description: Необходима аутентификация
+   *         description: Authentication required
    */
   app.post("/api/count", addon.checkValidToken(), async (req, res) => {
     const data = JSON.stringify({ jql: `project = ${req.body.key}` });

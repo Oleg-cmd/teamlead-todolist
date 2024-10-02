@@ -115,13 +115,13 @@ class Store {
       if (currentStatus.statusCategory.key === "done") {
         task.fields.status.statusCategory.key = currentStatus.oldStatus;
         console.log(
-          `Задача ${taskKey} возвращена в статус "${currentStatus.oldStatus}"`
+          `Task ${taskKey} returned in status "${currentStatus.oldStatus}"`
         );
       } else {
         currentStatus.oldStatus = currentStatus.statusCategory?.key;
         task.fields.status.statusCategory.key = "done";
         console.log(
-          `Задача ${taskKey} переведена из статуса ${currentStatus.oldStatus} в статус ${task.fields.status.statusCategory.key}`
+          `Task ${taskKey} moved from status ${currentStatus.oldStatus} to ${task.fields.status.statusCategory.key}`
         );
       }
     }

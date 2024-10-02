@@ -6,11 +6,11 @@ export default function routes(app, addon) {
    * @swagger
    * /:
    *   get:
-   *     summary: Перенаправление на файл дескриптора приложения
-   *     description: Перенаправляет на `/atlassian-connect.json`.
+   *     summary: Redirect to the application descriptor file
+   *     description: Redirects to `/atlassian-connect.json`.
    *     responses:
    *       302:
-   *         description: Перенаправление
+   *         description: Redirection
    */
   app.get("/", (req, res) => {
     res.redirect("/atlassian-connect.json");
@@ -20,15 +20,15 @@ export default function routes(app, addon) {
    * @swagger
    * /todolist:
    *   get:
-   *     summary: Отображение страницы TodoList
-   *     description: Возвращает страницу TodoList для авторизованных пользователей.
+   *     summary: Display the TodoList page
+   *     description: Returns the TodoList page for authorized users.
    *     security:
    *       - jwtAuth: []
    *     responses:
    *       200:
-   *         description: Страница TodoList
+   *         description: TodoList page
    *       401:
-   *         description: Необходима аутентификация
+   *         description: Authentication required
    */
   app.get("/todolist", addon.authenticate(), (req, res) => {
     res.render("todolist.jsx", {
