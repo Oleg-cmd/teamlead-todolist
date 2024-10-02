@@ -30,6 +30,22 @@ Experimental mode explanation
 
 
 
+## For easy setup project use docker:
+    1) configure credentials.json (ex. credentials.json.sample)
+    2) start docker engine
+    3) build app:  docker build -t teamlead-todolist .
+    4) run app: docker run -p 3000:3000 teamlead-todolist
+
+
+### Setup without docker may cause problems with Dependencies:
+    1) configure credentials.json (ex. credentials.json.sample)
+    2) npm upgrade
+    3) npm ci
+    4) npm run build
+
+    
+
+
 ### Documentation
 
 [Atlassian-Connect-Express](https://bitbucket.org/atlassian/atlassian-connect-express/src/master/README.md)
