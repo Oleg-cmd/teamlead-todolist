@@ -32,6 +32,9 @@ import { dirname } from "path";
 import routes from "./routes/index.js";
 import { addServerSideRendering } from "./server-side-rendering.js";
 
+// Swagger
+import { swagger } from "./swagger/swagger.js";
+
 // Bootstrap Express and atlassian-connect-express
 const app = express();
 const addon = ace(app);
@@ -99,6 +102,9 @@ if (devEnv) app.use(errorHandler());
 // Wire up routes
 routes(app, addon);
 
+// Wire up swagger
+swagger(app);
+
 // Boot the HTTP server
 http.createServer(app).listen(port, () => {
   console.log("App server running at http://" + os.hostname() + ":" + port);
@@ -118,3 +124,5 @@ function redactJwtTokens(req) {
   });
   return redacted;
 }
+
+export { addon };

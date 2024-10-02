@@ -14,6 +14,10 @@ import store from "../../../shared/model/Store";
 import Spinner from "@atlaskit/spinner";
 import { Checkbox } from "@atlaskit/checkbox";
 
+/**
+ * ProjectForm component for selecting a project and fetching tasks.
+ * Utilizes MobX for state management and Atlassian's form components.
+ */
 export const ProjectForm = observer(() => {
   const {
     projects,
@@ -25,17 +29,19 @@ export const ProjectForm = observer(() => {
     setExperimental,
   } = store;
 
+  // Map project data to options for the select component
   const projectOptions = projects.map((project) => ({
     value: project.key,
     label: project.name,
   }));
 
+  // Handle form submission
   const handleSubmit = async (data) => {
-    setExperimental(data.experimental);
-    setProjectKey(data.project.value);
-    const count = await fetchCount();
-    setTasksPerPage(data.maxItems);
-    await fetchTasks();
+    setExperimental(data.experimental); // Set experimental flag
+    setProjectKey(data.project.value); // Set selected project key
+    const count = await fetchCount(); // Fetch the count of tasks
+    setTasksPerPage(data.maxItems); // Set max items per page
+    await fetchTasks(); // Fetch tasks for the selected project
   };
 
   return (
@@ -48,12 +54,13 @@ export const ProjectForm = observer(() => {
           >
             <FormHeader title='Project Selection' />
             <FormSection>
+              {/* Project selection field */}
               <Field
                 name='project'
                 label='Select by Name'
                 validate={(value) => {
                   if (!value) {
-                    return "Project selection is required.";
+                    return "Project selection is required."; // Validation message
                   }
                   return undefined;
                 }}
@@ -64,31 +71,34 @@ export const ProjectForm = observer(() => {
                       {...fieldProps}
                       options={projectOptions}
                       placeholder='Select a project'
-                      isLoading={loading}
+                      isLoading={loading} // Show loading indicator if fetching
                       isClearable
-                      required
+                      required // Make field required
                     />
-                    {error && <ErrorMessage>{error}</ErrorMessage>}
+                    {error && <ErrorMessage>{error}</ErrorMessage>}{" "}
+                    {/* Show error if validation fails */}
                   </Fragment>
                 )}
               </Field>
 
+              {/* Maximum items input field */}
               <Field
                 label='Maximum Items to Display'
                 name='maxItems'
-                defaultValue='10'
+                defaultValue='10' // Default value
               >
                 {({ fieldProps }) => (
                   <Fragment>
                     <Textfield
                       {...fieldProps}
-                      type='number'
+                      type='number' // Number input
                       data-testid='nativeFormValidationTestNumber'
                     />
                   </Fragment>
                 )}
               </Field>
 
+              {/* Experimental checkbox */}
               <Field
                 name='experimental'
                 label='Experimental'
@@ -97,22 +107,23 @@ export const ProjectForm = observer(() => {
                   <Checkbox
                     {...fieldProps}
                     size='large'
-                    label='Do not include with large datasets'
+                    label='Do not include with large datasets' // Checkbox label
                   />
                 )}
               </Field>
             </FormSection>
 
+            {/* Form footer with submit button or spinner */}
             <FormFooter>
               {submitting ? (
                 <Spinner
                   interactionName='load'
-                  label='Loading'
+                  label='Loading' // Loading label
                 />
               ) : (
                 <Button
-                  style={{ width: "100%" }}
-                  type='submit'
+                  style={{ width: "100%" }} // Full width button
+                  type='submit' // Submit button
                   appearance='primary'
                 >
                   Fetch Tasks

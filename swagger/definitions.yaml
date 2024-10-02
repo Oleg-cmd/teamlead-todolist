@@ -1,0 +1,52 @@
+components:
+  schemas:
+    Task:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID задачи
+        key:
+          type: string
+          description: Ключ задачи
+        summary:
+          type: string
+          description: Краткое описание задачи
+        assignee:
+          type: object
+          description: Исполнитель задачи (может быть null)
+        status:
+          type: object
+          description: Статус задачи
+          properties:
+            self:
+              type: string
+              description: URL ресурса статуса
+            description:
+              type: string
+              description: Описание статуса
+            iconUrl:
+              type: string
+              description: URL иконки статуса
+            name:
+              type: string
+              description: Название статуса
+            id:
+              type: string
+              description: ID статуса
+            statusCategory:
+              type: object
+              description: Категория статуса
+
+    Project:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID проекта
+        key:
+          type: string
+          description: Ключ проекта
+        name:
+          type: string
+          description: Название проекта

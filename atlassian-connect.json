@@ -6,8 +6,14 @@
   "authentication": {
     "type": "jwt"
   },
+
+  "vendor": {
+    "name": "Teamlead TodoList",
+    "url": "https://olevegic-dev.atlassian.net"
+  },
   "lifecycle": {
-    "installed": "/installed"
+    "installed": "/installed",
+    "unistalled": "/uninstalled"
   },
   "scopes": ["READ"],
   "apiMigrations": {
@@ -21,12 +27,7 @@
         "name": {
           "value": "TodoList Tasks"
         },
-        "url": "/todolist",
-        "conditions": [
-          {
-            "condition": "user_is_logged_in"
-          }
-        ]
+        "url": "/todolist"
       }
     ]
   }

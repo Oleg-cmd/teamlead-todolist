@@ -32,7 +32,7 @@ const Navigation = observer(() => {
           testId='nestable-navigation-content'
         >
           <Section isList>
-            {/* Project selection */}
+            {/* Button for selecting projects */}
             <ButtonItem
               iconBefore={<WorkIcon label='' />}
               isSelected={activeTab === "projects"}
@@ -41,7 +41,7 @@ const Navigation = observer(() => {
               Projects
             </ButtonItem>
 
-            {/* Task selection  */}
+            {/* Button for selecting tasks, conditional on project key */}
             <ButtonItem
               iconBefore={
                 projectKey ? (
@@ -51,12 +51,8 @@ const Navigation = observer(() => {
                 )
               }
               isSelected={activeTab === "tasks"}
-              onClick={() => {
-                if (projectKey) {
-                  setActiveTab("tasks");
-                }
-              }}
-              isDisabled={!projectKey}
+              onClick={() => projectKey && setActiveTab("tasks")}
+              isDisabled={!projectKey} // Disable if no project is selected
             >
               Tasks
             </ButtonItem>

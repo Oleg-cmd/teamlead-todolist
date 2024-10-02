@@ -9,5 +9,4 @@ views/*.js
 views/*.js.map
 views/node/*.js
 views/node/*.js.map
-yarn.lock
 .vscode

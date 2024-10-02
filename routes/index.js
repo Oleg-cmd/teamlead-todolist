@@ -1,45 +1,41 @@
-import { fetchTaskCount } from "../services/count/fetchTaskCount.js";
-import { fetchProjects } from "../services/projects/fetchProjects.js";
-import { fetchTasks } from "../services/tasks/fetchTasks.js";
+import projectsRoutes from "./projects.js";
+import tasksRoutes from "./tasks.js";
 
 export default function routes(app, addon) {
+  /**
+   * @swagger
+   * /:
+   *   get:
+   *     summary: Перенаправление на файл дескриптора приложения
+   *     description: Перенаправляет на `/atlassian-connect.json`.
+   *     responses:
+   *       302:
+   *         description: Перенаправление
+   */
   app.get("/", (req, res) => {
     res.redirect("/atlassian-connect.json");
   });
 
+  /**
+   * @swagger
+   * /todolist:
+   *   get:
+   *     summary: Отображение страницы TodoList
+   *     description: Возвращает страницу TodoList для авторизованных пользователей.
+   *     security:
+   *       - jwtAuth: []
+   *     responses:
+   *       200:
+   *         description: Страница TodoList
+   *       401:
+   *         description: Необходима аутентификация
+   */
   app.get("/todolist", addon.authenticate(), (req, res) => {
     res.render("todolist.jsx", {
       title: "TodoList",
     });
   });
 
-  app.post("/api/tasks", async (req, res) => {
-    try {
-      const data = await fetchTasks(req);
-      res.json(data);
-    } catch (err) {
-      console.error(err);
-      res.status(500).send("Ошибка при получении задач");
-    }
-  });
-
-  app.post("/api/count", async (req, res) => {
-    try {
-      const data = await fetchTaskCount(req);
-      res.json(data);
-    } catch (err) {
-      console.error(err);
-      res.status(500).send("Ошибка при получении количества задач");
-    }
-  });
-
-  app.get("/api/projects", async (req, res) => {
-    try {
-      const data = await fetchProjects();
-      res.json(data);
-    } catch (err) {
-      console.error(err);
-      res.status(500).send("Ошибка при получении проектов");
-    }
-  });
+  projectsRoutes(app, addon);
+  tasksRoutes(app, addon);
 }

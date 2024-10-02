@@ -13,15 +13,16 @@ import {
 export const TaskCard = ({ task, onDelete, onToggleComplete }) => {
   const [isChecked, setIsChecked] = useState(task.status);
 
+  // Handle checkbox toggle
   const handleCheckboxChange = useCallback(() => {
     const newCheckedState = !isChecked;
     setIsChecked(newCheckedState);
-    onToggleComplete(newCheckedState);
+    onToggleComplete(newCheckedState); // Notify parent of change
   }, [isChecked, onToggleComplete]);
 
   return (
     <Stack
-      xcss={containerStyles(isChecked)}
+      xcss={containerStyles(isChecked)} // Apply styles based on checked state
       space='space.150'
     >
       <Text as='span'>{task.summary}</Text>
@@ -39,14 +40,14 @@ export const TaskCard = ({ task, onDelete, onToggleComplete }) => {
           alignBlock='center'
         >
           <Checkbox
-            isChecked={isChecked}
+            isChecked={isChecked} // Controlled checkbox state
             onChange={handleCheckboxChange}
             label=''
             size='large'
             name='task-checkbox'
           />
           <Button
-            onClick={onDelete}
+            onClick={onDelete} // Trigger delete action
             appearance='danger'
             spacing='compact'
           >

@@ -4,6 +4,7 @@ import { findTasks } from "../../entities/tasks/api/findTasks";
 import { getCount } from "../../entities/tasks/api/getCount";
 
 class Store {
+  // Store state variables
   tasks = { issues: [] };
   projects = [];
   loading = true;
@@ -18,6 +19,7 @@ class Store {
 
   constructor() {
     makeAutoObservable(this, {
+      // Bind actions for MobX
       setTasks: action.bound,
       setProjects: action.bound,
       setLoading: action.bound,
@@ -37,62 +39,70 @@ class Store {
     });
   }
 
+  // Set experimental mode
   setExperimental = (experiment) => {
     this.experimental = experiment;
   };
 
+  // Update task count
   setTaskCount = (count) => {
     this.taskCount = count;
   };
 
+  // Update current page for pagination
   setCurrentPage(page) {
     this.currentPage = page;
   }
 
+  // Toggle visibility of completed tasks
   toggleShowCompleted() {
     this.showCompleted = !this.showCompleted;
   }
 
-  setMaxPage = (count) => {
-    this.maxPage = count;
-  };
-
+  // Set the number of tasks displayed per page
   setTasksPerPage = (count) => {
-    // hope user is not genius
     this.tasksPerPage = Number.parseInt(count);
   };
 
+  // Update tasks from API
   setTasks = (apiTasks) => {
     this.tasks = apiTasks;
   };
 
+  // Update projects from API
   setProjects = (apiProjects) => {
     this.projects = apiProjects;
   };
 
+  // Set loading state
   setLoading = (isLoading) => {
     this.loading = isLoading;
   };
 
+  // Set the currently active tab
   setActiveTab = (tab) => {
     this.activeTab = tab;
   };
 
+  // Update the project key used in API calls
   setProjectKey = (key) => {
     this.projectKey = key;
   };
 
+  // Remove a task by its key
   removeTask(taskKey) {
     this.tasks.issues = this.tasks.issues.filter(
       (task) => task.key !== taskKey
     );
   }
 
+  // Toggle task completion status
   toggleTaskCompletion(taskKey) {
     const task = this.tasks.issues.find((task) => task.key === taskKey);
     if (task && task.fields) {
       const currentStatus = task.fields.status;
 
+      // Save old status if it’s the first toggle
       if (!currentStatus.oldStatus) {
         if (currentStatus.statusCategory?.key === "done") {
           currentStatus.oldStatus = "temp";
@@ -101,6 +111,7 @@ class Store {
         }
       }
 
+      // Toggle the completion status
       if (currentStatus.statusCategory.key === "done") {
         task.fields.status.statusCategory.key = currentStatus.oldStatus;
         console.log(
@@ -116,11 +127,13 @@ class Store {
     }
   }
 
+  // Fetch the count of tasks
   fetchCount = async () => {
     const data = await getCount(this.projectKey);
     this.setTaskCount(data.count);
   };
 
+  // Fetch tasks based on project key and pagination
   fetchTasks = async () => {
     const data = await findTasks(
       this.projectKey,
@@ -131,15 +144,9 @@ class Store {
     this.setActiveTab("tasks");
   };
 
+  // Add more tasks if they haven't been loaded yet
   addTasks = async () => {
-    if (this.experimental) {
-      return;
-    }
-
-    if (this.loaded.includes(this.currentPage)) {
-      // console.log("exists");
-      return;
-    }
+    if (this.experimental || this.loaded.includes(this.currentPage)) return;
 
     const data = await findTasks(
       this.projectKey,
@@ -152,10 +159,9 @@ class Store {
     }
   };
 
+  // Update the list of issues with new tasks
   updateTasksIssues = (newIssues) => {
-    if (this.experimental) {
-      return;
-    }
+    if (this.experimental) return;
 
     const existingKeys = new Set(this.tasks.issues.map((task) => task.key));
     const uniqueNewIssues = newIssues.filter(
@@ -164,6 +170,7 @@ class Store {
     this.tasks.issues = [...this.tasks.issues, ...uniqueNewIssues];
   };
 
+  // Fetch projects and update loading state
   fetchProjects = async () => {
     this.setLoading(true);
     const data = await getProjects();
