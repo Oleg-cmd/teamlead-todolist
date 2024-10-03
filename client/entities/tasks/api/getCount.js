@@ -5,7 +5,7 @@ export const getCount = async (key) => {
   try {
     const token = await getToken(); // Retrieve JWT token
 
-    const response = await fetch("/api/count", {
+    const response = await fetch("/api/task/count", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

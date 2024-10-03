@@ -5,9 +5,9 @@ export const post = (req, endpoint, data) => {
 
   if (!client) {
     console.error(
-      "addon.httpClient(req) вернул null. Проверьте аутентификацию."
+      "addon.httpClient(req) returned null. Please check authentication."
     );
-    return Promise.reject(new Error("Ошибка аутентификации"));
+    return Promise.reject(new Error("Authentication error"));
   }
 
   const options = {
@@ -22,21 +22,17 @@ export const post = (req, endpoint, data) => {
   return new Promise((resolve, reject) => {
     client.post(options, (err, response, body) => {
       if (err) {
-        console.error(
-          `Ошибка при выполнении POST запроса к ${endpoint}:`,
-          err,
-          {
-            response: response ? response.toJSON() : undefined,
-            requestBody: data,
-          }
-        );
+        console.error(`Error performing POST request to ${endpoint}:`, err, {
+          response: response ? response.toJSON() : undefined,
+          requestBody: data,
+        });
         reject(err);
         return;
       }
 
       // Check statuses
-      if (![200, 201].includes(response.statusCode)) {
-        const error = `Ошибка POST запроса к ${endpoint}: ${JSON.stringify(
+      if (![200, 201, 204].includes(response.statusCode)) {
+        const error = `Error POST request to ${endpoint}: ${JSON.stringify(
           response ? response.toJSON() : undefined,
           null,
           2
@@ -52,7 +48,7 @@ export const post = (req, endpoint, data) => {
         resolve(parsedBody);
       } catch (parseError) {
         console.error(
-          `Ошибка парсинга JSON ответа от ${endpoint}:`,
+          `Error parsing JSON response from ${endpoint}:`,
           parseError
         );
         reject(parseError);

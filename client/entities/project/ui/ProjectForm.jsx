@@ -14,6 +14,8 @@ import store from "../../../shared/model/Store";
 import Spinner from "@atlaskit/spinner";
 import { Checkbox } from "@atlaskit/checkbox";
 
+import QuestionCircleIcon from "@atlaskit/icon/glyph/question-circle";
+import Tooltip from "@atlaskit/tooltip";
 /**
  * ProjectForm component for selecting a project and fetching tasks.
  * Utilizes MobX for state management and Atlassian's form components.
@@ -27,6 +29,7 @@ export const ProjectForm = observer(() => {
     setTasksPerPage,
     fetchCount,
     setExperimental,
+    setReal,
   } = store;
 
   // Map project data to options for the select component
@@ -38,6 +41,7 @@ export const ProjectForm = observer(() => {
   // Handle form submission
   const handleSubmit = async (data) => {
     setExperimental(data.experimental); // Set experimental flag
+    setReal(data.real);
     setProjectKey(data.project.value); // Set selected project key
     const count = await fetchCount(); // Fetch the count of tasks
     setTasksPerPage(data.maxItems); // Set max items per page
@@ -104,11 +108,39 @@ export const ProjectForm = observer(() => {
                 label='Experimental'
               >
                 {({ fieldProps }) => (
-                  <Checkbox
-                    {...fieldProps}
-                    size='large'
-                    label='Do not include with large datasets' // Checkbox label
-                  />
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <Tooltip content='In experimental mode ALL tasks are loaded at once, but only the above number is displayed, may cause a load with a large number of tasks'>
+                      <span>
+                        <QuestionCircleIcon />
+                      </span>
+                    </Tooltip>
+                    <Checkbox
+                      {...fieldProps}
+                      size='large'
+                      label='Do not include with large datasets'
+                    />
+                  </div>
+                )}
+              </Field>
+
+              {/* Real checkbox */}
+              <Field
+                name='real'
+                label='Real'
+              >
+                {({ fieldProps }) => (
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <Tooltip content='In real mode there is real DELETION of tasks, real CHANGE of task types, be careful'>
+                      <span>
+                        <QuestionCircleIcon />
+                      </span>
+                    </Tooltip>
+                    <Checkbox
+                      {...fieldProps}
+                      size='large'
+                      label='Carefully' // Checkbox label
+                    />
+                  </div>
                 )}
               </Field>
             </FormSection>

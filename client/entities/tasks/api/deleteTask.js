@@ -1,17 +1,17 @@
 import { getToken } from "../../../shared/api/getToken";
 
-// Function to find tasks based on parameters
-export const findTasks = async (key, maxResults, startAt) => {
+// Function to delete tasks based on id
+export const deleteTask = async (issueID) => {
   try {
     const token = await getToken(); // Get JWT token
 
-    const response = await fetch("/api/task", {
+    const response = await fetch("/api/task/delete", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: "JWT " + token,
       },
-      body: JSON.stringify({ key, maxResults, startAt }),
+      body: JSON.stringify({ issueID }),
     });
 
     if (!response.ok) {

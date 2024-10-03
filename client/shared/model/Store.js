@@ -2,6 +2,7 @@ import { action, makeAutoObservable } from "mobx";
 import { getProjects } from "../../entities/project/api/getProjects";
 import { findTasks } from "../../entities/tasks/api/findTasks";
 import { getCount } from "../../entities/tasks/api/getCount";
+import { deleteTask } from "../../entities/tasks/api/deleteTask";
 
 class Store {
   // Store state variables
@@ -14,8 +15,10 @@ class Store {
   projectKey = "";
   currentPage = 0;
   loaded = [0];
-  experimental = false;
   taskCount = 0;
+
+  experimental = false;
+  real = false;
 
   constructor() {
     makeAutoObservable(this, {
@@ -42,6 +45,11 @@ class Store {
   // Set experimental mode
   setExperimental = (experiment) => {
     this.experimental = experiment;
+  };
+
+  // Set experimental mode
+  setReal = (isReal) => {
+    this.real = isReal;
   };
 
   // Update task count
@@ -90,11 +98,17 @@ class Store {
   };
 
   // Remove a task by its key
-  removeTask(taskKey) {
+  removeTask = async (taskKey) => {
+    const currentTask = this.tasks.issues.find((task) => task.key === taskKey);
+
+    if (this.real) {
+      await deleteTask(currentTask.id);
+    }
+
     this.tasks.issues = this.tasks.issues.filter(
       (task) => task.key !== taskKey
     );
-  }
+  };
 
   // Toggle task completion status
   toggleTaskCompletion(taskKey) {

@@ -29,11 +29,11 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 
 // Routes live here; this is the C in MVC
-import routes from "./routes/index.js";
+import routes from "./server/routes.js";
 import { addServerSideRendering } from "./server-side-rendering.js";
 
 // Swagger
-import { swagger } from "./swagger/swagger.js";
+import { swagger } from "./server/swagger/swagger.js";
 
 // Bootstrap Express and atlassian-connect-express
 const app = express();
